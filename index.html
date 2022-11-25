@@ -119,8 +119,8 @@
             </p>
 
             <div class="btn-group">
-              <a href="#contact" class="btn btn-primary blue">Get a Quote</a>
-
+<!--               <a href="#contact" class="btn btn-primary blue">Get a Quote</a>
+ -->
               <a href="#about" class="btn">About Me</a>
             </div>
 
@@ -394,15 +394,24 @@
 
             <div class="wrapper">
 
-              <form id="submit-form"action="" class="contact-form">
+              <form id="submit-for" action="#submit-for" class="contact-form" onsubmit="validateForm()">
 
-                <input type="text" name="name" placeholder="Name" required class="contact-input">
-
-                <input type="email" name="email" placeholder="Email" required class="contact-input">
-
-                <textarea name="message" placeholder="Message" required class="contact-input"></textarea>
-
+                <input type="text" id="contact-name" name="name" placeholder="Name"  class="contact-input">
+              <div id="name-error">
+                
+              </div>
+                <input type="email" id="contact-email" name="email" placeholder="Email"  class="contact-input">
+              <div id="email-error">
+                
+              </div>
+                <textarea name="message" id="contact-message" placeholder="Message"  class="contact-input"></textarea>
+              <div id="message-error">
+                
+              </div>
                 <button type="submit" class="btn-submit">Submit Message</button>
+              <div id="submit-error">
+                
+              </div>
 
               </form>
 
@@ -547,8 +556,90 @@
   -->
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+
+  <!-- validation -->
+
+
  <script>
-        $("#submit-form").submit((e)=>{
+$('#submit-for').submit(function(e){
+  e.preventDefault();
+})
+
+var nameError = document.getElementById('name-error');
+var emailError = document.getElementById('email-error');
+var messageError = document.getElementById('message-error');
+var submitError = document.getElementById('submit-error');
+
+function validateName(){
+    var name = document.getElementById('contact-name').value;
+
+    if (name.length == 0) {
+        nameError.innerHTML = 'Name is required';
+        return false;
+    }
+    if (!name.match(/^[A-Za-z]*\s{1}[A-Za-z]*$/)) {
+        nameError.innerHTML = 'Write full name';
+        return false;
+    }
+
+    nameError.innerHTML = 'valid';
+
+    return true;
+
+
+}
+
+
+
+
+
+function validateEmail(){
+    var email = document.getElementById('contact-email').value;
+
+    if (email.length == 0) {
+        emailError.innerHTML = 'Email is required';
+        return false;
+    }
+
+    if(!email.match(/^[A-Za-z\._\-[0-9]*[@][A-Za-z]*[\.][a-z]{2,4}$/)){
+        emailError.innerHTML = 'Email Invalid'
+        return false;
+    }
+
+    emailError.innerHTML = 'valid';
+    return true;
+
+}
+function validateMessage() {
+    var message = document.getElementById('contact-message').value;
+
+    var required = 10;
+    var left = required - message.length;
+
+    if(left>0){
+        messageError.innerHTML = left + 'more character is required';
+        return false;
+    }
+
+
+    messageError.innerHTML = 'valid';
+    return true;
+
+
+
+}
+
+function validateForm() {
+    if (!validateName() || !validateEmail() || !validateMessage()) {
+        submitError.style.display = 'block';
+        submitError.innerHTML = 'Please fill correctly and submit';
+        setTimeout(function(){submitError.style.display = 'none';}, 3000);
+        return false;
+
+    }else{
+        alert("your Form submitted i will call you back..!");
+                $("#submit-for").submit((e)=>{
             e.preventDefault()
             $.ajax({
                 url:"https://script.google.com/macros/s/AKfycbzWg7US2KGhBE_NwCRCr7c9Sj7mrtbVdLGR6GuX1V2sJscrTTV56HdNjjY6ykYVBzqu/exec",
@@ -565,6 +656,8 @@
                 }
             })
         })
+       return true;         
+}}
     </script>
 </body>
 
